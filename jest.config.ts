@@ -3,6 +3,11 @@ import type { InitialOptionsTsJest } from 'ts-jest/dist/types';
 const config: InitialOptionsTsJest = {
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coveragePathIgnorePatterns: ['<rootDir>/src/db/*', '<rootDir>/src/testing/*', '<rootDir>/src/types/*'],
+  coverageThreshold: {
+    global: {
+      lines: 95,
+    },
+  },
   moduleNameMapper: {
     '^controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^db/(.*)$': '<rootDir>/src/db/$1',
