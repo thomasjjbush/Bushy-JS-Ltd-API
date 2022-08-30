@@ -21,10 +21,8 @@ jobs:
         node-version: 16
         cache: 'yarn'
 
-    - name: Install dependancies
-      run: yarn
-
     - name: Run tests
       uses: ArtiomTr/jest-coverage-report-action@v2
       with:
+        package-manager: yarn
         test-script: yarn test --all --collectCoverage
