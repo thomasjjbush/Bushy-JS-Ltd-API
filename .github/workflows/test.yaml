@@ -27,4 +27,4 @@ jobs:
     - name: Run tests
       uses: ArtiomTr/jest-coverage-report-action@v2
       with:
-        test-script: yarn test --all
+        test-script: yarn test --all --collectCoverage
