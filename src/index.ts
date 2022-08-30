@@ -51,7 +51,7 @@ let app: Express;
   const server = createServer(app);
 
   if (process.env.NODE_ENV !== 'test') {
-    server.listen(9000);
+    server.listen(process.env.PORT || 9000);
   }
 })();
 
