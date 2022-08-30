@@ -1,0 +1,20 @@
+query {
+  projects: projectCollection(limit: 10, order: [year_DESC]) {
+    items {
+      client {
+        name
+        primaryColor
+        logo {
+          url
+        }
+        slug
+      }
+      name
+      slug
+      thumbnail {
+        url
+      }
+    }
+    total
+  }
+}

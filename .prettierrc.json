@@ -1,0 +1,8 @@
+{
+  "importOrder": ["^db/(.*)$", "^controllers/(.*)$", "^graphql/(.*)$", "^middleware/(.*)$", "^testing/(.*)$", "^types/(.*)$", "^utils/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "printWidth": 120,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all"
+}

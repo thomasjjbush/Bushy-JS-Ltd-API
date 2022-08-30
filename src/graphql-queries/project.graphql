@@ -1,0 +1,41 @@
+query($slug: String!) {
+  projects: projectCollection(where: { slug: $slug }) {
+    items {
+      client {
+        name
+        primaryColor
+        logo {
+          url
+        }
+        slug
+      }
+      name
+      slug
+      description
+      gallery: galleryCollection(limit: 10) {
+        items {
+          url
+        }
+        total
+      }
+      hero {
+        url
+      }
+      primaryTag {
+        name
+        slug
+      }
+      responsibilities: responsibilitiesCollection(limit: 10) {
+        items {
+          description
+          icon
+          name
+        }
+      }
+      video {
+        url
+      }
+      year
+    }
+  }
+}

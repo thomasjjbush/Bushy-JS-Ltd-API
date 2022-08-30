@@ -1,0 +1,7 @@
+query($slug: String!) {
+  projects: projectCollection(where: { slug: $slug }) {
+    items {
+      slug
+    }
+  }
+}

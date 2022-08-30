@@ -1,0 +1,50 @@
+{
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "overrides": [
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "sort-keys-fix",
+    "typescript-sort-keys",
+    "prettier"
+  ],
+  "rules": {
+    "camelcase": "off",
+    "capitalized-comments": ["error", "never"],
+    "curly": "error",
+    "default-case": "error",
+    "default-case-last": "error",
+    "default-param-last": "error",
+    "dot-notation": "error",
+    "eqeqeq": "error",
+    "multiline-comment-style": ["error", "separate-lines"],
+    "no-alert": "error",
+    "no-delete-var": "error",
+    "no-else-return": "error",
+    "no-empty": "error",
+    "no-inline-comments": "error",
+    "no-proto": "error",
+    "no-nested-ternary": "error",
+    "no-return-await": "error",
+    "no-lonely-if": "error",
+    "no-useless-catch": "error",
+    "one-var": ["error", "never"],
+    "prefer-const": "error",
+    "sort-keys-fix/sort-keys-fix": "error",
+    "typescript-sort-keys/interface": "error",
+    "typescript-sort-keys/string-enum": "error"
+  }
+}

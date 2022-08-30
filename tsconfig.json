@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "noEmit": true,    
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "importsNotUsedAsValues": "error",
+    "outDir": "build",
+    "typeRoots": [
+      "node_modules/@types",
+      "./src/types"
+    ],
+    "paths": {
+      "db/*": ["./src/db/*"],
+      "controllers/*": ["./src/controllers/*"],
+      "graphql-queries/*": ["./src/graphql-queries/*"],
+      "middleware/*": ["./src/middleware/*"],
+      "testing/*": ["./src/testing/*"],
+      "types/*": ["./src/types/*"],
+      "utils/*": ["./src/utils/*"]
+    },
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,17 @@
+query {
+  employment: employmentCollection(order: [startDate_DESC]) {
+    items {
+      companyName
+      endDate
+      location {
+        lon
+        lat
+      }
+      responsibilities
+      startDate
+      title
+      url
+    }
+    total
+  }
+}
