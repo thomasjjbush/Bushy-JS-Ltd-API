@@ -53,7 +53,8 @@
     "query-string": "^7.1.1"
   },
   "scripts": {
-    "start": "ts-node-dev --files -r tsconfig-paths/register ./src/index.ts",
+    "dev": "ts-node-dev --files -r tsconfig-paths/register ./src/index.ts",
+    "start": "ts-node --files -r tsconfig-paths/register ./src/index.ts",
     "test": "jest -maxWorkers=1",
     "test:coverage": "jest -maxWorkers=1 --all --collectCoverage",
     "test:watch": "jest -maxWorkers=1 --watch"
