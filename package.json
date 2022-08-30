@@ -51,7 +51,6 @@
   },
   "scripts": {
     "start": "ts-node-dev --files -r tsconfig-paths/register ./src/index.ts",
-    "build": "ts-node --files -r tsconfig-paths/register ./src/index.ts",
     "test": "jest -maxWorkers=1",
     "test:coverage": "jest -maxWorkers=1 --all --collectCoverage",
     "test:watch": "jest -maxWorkers=1 --watch"
