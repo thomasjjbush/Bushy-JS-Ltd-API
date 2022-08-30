@@ -6,6 +6,9 @@
   "author": "thomasjjbush",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "16.x"
+  },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/cookie-parser": "^1.4.3",
