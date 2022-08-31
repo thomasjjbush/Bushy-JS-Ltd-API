@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { createResponse } from 'node-mocks-http';
+import { createRequest, createResponse } from 'node-mocks-http';
 
 import { saveToken, signToken, verifyToken } from './';
 
@@ -39,8 +39,9 @@ describe('token', () => {
   describe('saveToken', () => {
     it('should apply the correct http only cookie to response', () => {
       const res = createResponse();
+      const req = createRequest();
 
-      saveToken(res, 'token');
+      saveToken(req, res, 'token');
       expect(res.cookies.token).toMatchObject({
         options: { httpOnly: true, secure: true },
         value: 'token',
