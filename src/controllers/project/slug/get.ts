@@ -8,6 +8,14 @@ import type { ContentfulProject } from 'types/contentful';
 
 import { useGraphql } from 'utils/graphql';
 
+async function populateComments(Model: typeof CommentDocument, project: string) {
+  return (await Model.find({ project }).populate('author').limit(10).sort({ date: 'asc' })) ?? [];
+}
+
+async function populateLikes(Model: typeof LikeDocument, project: string) {
+  return (await Model.find({ project }).populate('author').limit(10).sort({ date: 'asc' })) ?? [];
+}
+
 export async function getProject(req: Request, res: Response, next: NextFunction) {
   let projects: ContentfulProject[];
 
@@ -31,12 +39,10 @@ export async function getProject(req: Request, res: Response, next: NextFunction
     const project = {
       ...projects[0],
       commentCount: await CommentDocument.countDocuments({ project: req.params.slug }),
-      comments:
-        (await CommentDocument.find({ project: req.params.slug }).populate('author').limit(5).sort({ date: 'asc' })) ??
-        [],
+      comments: await populateComments(CommentDocument, req.params.slug),
       likeCount: await LikeDocument.countDocuments({ project: req.params.slug }),
+      likes: await populateLikes(LikeDocument, req.params.slug),
     };
-
     return res.json({ project });
   } catch {
     return next(createHttpError(503, 'Database service is unavailable'));
