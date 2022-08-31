@@ -42,7 +42,7 @@ describe('token', () => {
 
       saveToken(res, 'token');
       expect(res.cookies.token).toMatchObject({
-        options: { httpOnly: true, secure: false },
+        options: { httpOnly: true, secure: true },
         value: 'token',
       });
     });

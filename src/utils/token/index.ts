@@ -18,8 +18,9 @@ export async function verifyToken(token: string): Promise<string | null> {
 
 export function saveToken(res: Response, token: string): Response {
   res.cookie('token', token, {
+    domain: 'localhost',
     httpOnly: true,
-    secure: false,
+    secure: true,
   });
 
   return res;
