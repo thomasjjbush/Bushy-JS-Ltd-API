@@ -11,6 +11,7 @@ import { postComment } from 'controllers/project/slug/comment/post';
 import { getProject } from 'controllers/project/slug/get';
 import { deleteLike } from 'controllers/project/slug/like/id/delete';
 import { postLike } from 'controllers/project/slug/like/post';
+import { getMore } from 'controllers/project/slug/more/get';
 import { getProjects } from 'controllers/projects/get';
 import { signIn } from 'controllers/sign-in/get';
 import { signOut } from 'controllers/sign-out/get';
@@ -30,7 +31,7 @@ let app: Express;
 
   app.enable('trust proxy');
 
-  app.use(cors());
+  app.use(cors({ credentials: true, origin: true }));
   app.use(express.json());
   app.use(cookieParser());
   app.use(graphqlMiddleware);
@@ -38,6 +39,7 @@ let app: Express;
   app.get('/employment', getEmployment);
   app.get('/projects', getProjects);
   app.get('/project/:slug', getProject);
+  app.get('/project/:slug/more/:content', getMore);
   app.get('/sign-in', signIn);
   app.get('/sign-out', signOut);
 
