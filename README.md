@@ -159,6 +159,32 @@ interface ProjectResponse {
 }
 ```
 
+### GET /project/:slug/more/:content
+
+Paginated project content. (content is either `"comments"` or `"likes"`). Content has a default limit of 10. Accpets an optional `skip` query parameter which defaults to `0`.
+
+#### Errors
+
+| Status   | Message | 
+|----------|---------|
+| 400      | Invalid request |
+| 503      | Database service is unavailable |
+
+#### Response (200)
+
+```typescript
+interface UserResponse {
+  comments: Array<{
+    _id: string;
+    author: User;
+    comment: string;
+    date: string;
+    project: string;
+  }>;
+  skipped: number;
+}
+```
+
 ### GET /sign-in
 
 If a valid `httpOnly` token is not present on request you will be redirected to Linkedin's auth page.

@@ -1,4 +1,4 @@
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export function signToken(id: string): string {
@@ -16,10 +16,11 @@ export async function verifyToken(token: string): Promise<string | null> {
   }
 }
 
-export function saveToken(res: Response, token: string): Response {
+export function saveToken(req: Request, res: Response, token: string): Response {
   res.cookie('token', token, {
+    domain: req.hostname,
     httpOnly: true,
-    secure: false,
+    secure: true,
   });
 
   return res;

@@ -90,7 +90,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
         return next(createHttpError(503, 'Database service is unavailable'));
       }
 
-      return saveToken(res, signToken(user._id.toString())).json({ user: { ...user, _id: user._id.toString() } });
+      return saveToken(req, res, signToken(user._id.toString())).json({ user: { ...user, _id: user._id.toString() } });
     }
     // user needs to be directed to linkedin auth page
     default: {

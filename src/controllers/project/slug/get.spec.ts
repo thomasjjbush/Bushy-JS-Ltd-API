@@ -60,9 +60,22 @@ const mockComments = [
   },
 ];
 
+const mockLikes = [
+  {
+    author: {
+      initials: 'AN',
+      name: 'author-name',
+      profilePicture: 'author-profile-picture',
+    },
+    date: 'like-date',
+    project: 'like-project',
+  },
+];
+
 (useGraphql as jest.Mock).mockResolvedValue(mock);
 
 (CommentDocument as any).sort.mockResolvedValue(mockComments);
+(LikeDocument as any).sort.mockResolvedValue(mockLikes);
 
 describe('GET /project/:slug', () => {
   it('should return correct response', async () => {
@@ -85,9 +98,18 @@ describe('GET /project/:slug', () => {
     expect(CommentDocument.populate).toHaveBeenCalledTimes(1);
     expect(CommentDocument.populate).toHaveBeenCalledWith('author');
     expect((CommentDocument as any).limit).toHaveBeenCalledTimes(1);
-    expect((CommentDocument as any).limit).toHaveBeenCalledWith(5);
+    expect((CommentDocument as any).limit).toHaveBeenCalledWith(10);
     expect((CommentDocument as any).sort).toHaveBeenCalledTimes(1);
     expect((CommentDocument as any).sort).toHaveBeenCalledWith({ date: 'asc' });
+
+    expect(LikeDocument.find).toHaveBeenCalledTimes(1);
+    expect(LikeDocument.find).toHaveBeenCalledWith({ project: 'footle' });
+    expect(LikeDocument.populate).toHaveBeenCalledTimes(1);
+    expect(LikeDocument.populate).toHaveBeenCalledWith('author');
+    expect((LikeDocument as any).limit).toHaveBeenCalledTimes(1);
+    expect((LikeDocument as any).limit).toHaveBeenCalledWith(10);
+    expect((LikeDocument as any).sort).toHaveBeenCalledTimes(1);
+    expect((LikeDocument as any).sort).toHaveBeenCalledWith({ date: 'asc' });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.project).toEqual({
@@ -95,6 +117,7 @@ describe('GET /project/:slug', () => {
       commentCount: 20,
       comments: mockComments,
       likeCount: 20,
+      likes: mockLikes,
     });
   });
 
@@ -125,8 +148,9 @@ describe('GET /project/:slug', () => {
     expect(res.body.status).toBe(503);
   });
 
-  it('should default comments to an empty array if comment collection is nullish', async () => {
+  it('should default comments and likes to an empty array if comment/likes collection is nullish', async () => {
     (CommentDocument as any).sort.mockResolvedValueOnce(null);
+    (LikeDocument as any).sort.mockResolvedValueOnce(null);
 
     const res = await request(app).get('/project/footle');
     expect(res.statusCode).toBe(200);
@@ -135,6 +159,7 @@ describe('GET /project/:slug', () => {
       commentCount: 20,
       comments: [],
       likeCount: 20,
+      likes: [],
     });
   });
 });
