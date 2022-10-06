@@ -13,6 +13,9 @@ export async function getEmployment(req: Request, res: Response, next: NextFunct
     } = await useGraphql<ContentfulEmployment>({
       client: res.locals.graphqlClient,
       path: path.resolve(__dirname, './../../graphql-queries/employment.graphql'),
+      variables: {
+        locale: req.query.locale,
+      },
     });
     return res.json({ employment, total });
   } catch (e) {
