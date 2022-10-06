@@ -33,13 +33,13 @@ export enum ContentfulEndpoints {
 export interface ContentfulProject {
   client: ContentfulClient;
   description: string;
-  gallery: ContentfulAsset[];
+  gallery: { items: ContentfulAsset[]; total: number };
   hero: ContentfulAsset;
   name: string;
   primaryTag: ContentfulTag;
-  responsibilities: ContentfulResponsibility[];
+  responsibilities: { items: ContentfulResponsibility[] };
   slug: string;
-  tags: ContentfulTag[];
+  tags: { items: ContentfulTag[]; total: number };
   thumbnail: ContentfulAsset;
   video: ContentfulAsset;
   year: number;
