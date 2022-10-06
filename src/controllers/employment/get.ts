@@ -14,7 +14,7 @@ export async function getEmployment(req: Request, res: Response, next: NextFunct
       client: res.locals.graphqlClient,
       path: path.resolve(__dirname, './../../graphql-queries/employment.graphql'),
       variables: {
-        locale: req.query.locale,
+        locale: req.query.locale || 'en',
       },
     });
     return res.json({ employment, total });

@@ -51,7 +51,13 @@ describe('GET /projects', () => {
     const res = await request(app).get('/projects');
 
     expect(useGraphql).toHaveBeenCalledTimes(1);
-    expect(useGraphql).toHaveBeenCalledWith({ ...graphqlArgs, path: './../../graphql-queries/projects.graphql' });
+    expect(useGraphql).toHaveBeenCalledWith({
+      ...graphqlArgs,
+      path: './../../graphql-queries/projects.graphql',
+      variables: {
+        skip: 0,
+      },
+    });
 
     expect(CommentDocument.countDocuments).toHaveBeenCalledTimes(1);
     expect(CommentDocument.countDocuments).toHaveBeenCalledWith({ project: 'project-slug' });
@@ -60,7 +66,14 @@ describe('GET /projects', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.total).toBe(1);
-    expect(res.body.projects).toEqual([{ ...mock.projects.items[0], commentCount: 20, likeCount: 20 }]);
+    expect(res.body.projects).toEqual([
+      {
+        ...mock.projects.items[0],
+        commentCount: 20,
+        description: mock.projects.items[0].description + '...',
+        likeCount: 20,
+      },
+    ]);
   });
 
   it('should return 503 if "Contentful service is unavailable"', async () => {

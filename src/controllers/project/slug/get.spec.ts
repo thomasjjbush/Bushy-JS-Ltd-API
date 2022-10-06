@@ -21,7 +21,7 @@ const mock = {
           slug: 'client-slug',
         },
         description: 'project-description',
-        gallery: [{ url: 'gallery-url' }],
+        gallery: { items: [{ url: 'gallery-url' }] },
         hero: {
           url: 'hero-url',
         },
@@ -30,14 +30,19 @@ const mock = {
           name: 'primary-tag-name',
           slug: 'primary-tag-slug',
         },
-        responsibilities: [
-          {
-            description: 'responsibility-description',
-            icon: 'responsibility-icon',
-            name: 'responsibility-name',
-          },
-        ],
+        responsibilities: {
+          items: [
+            {
+              description: 'responsibility-description',
+              icon: 'responsibility-icon',
+              name: 'responsibility-name',
+            },
+          ],
+        },
         slug: 'project-slug',
+        tags: {
+          items: [],
+        },
         video: {
           url: 'video-url',
         },
@@ -98,26 +103,29 @@ describe('GET /project/:slug', () => {
     expect(CommentDocument.populate).toHaveBeenCalledTimes(1);
     expect(CommentDocument.populate).toHaveBeenCalledWith('author');
     expect((CommentDocument as any).limit).toHaveBeenCalledTimes(1);
-    expect((CommentDocument as any).limit).toHaveBeenCalledWith(10);
+    expect((CommentDocument as any).limit).toHaveBeenCalledWith(5);
     expect((CommentDocument as any).sort).toHaveBeenCalledTimes(1);
-    expect((CommentDocument as any).sort).toHaveBeenCalledWith({ date: 'asc' });
+    expect((CommentDocument as any).sort).toHaveBeenCalledWith({ date: 'desc' });
 
     expect(LikeDocument.find).toHaveBeenCalledTimes(1);
     expect(LikeDocument.find).toHaveBeenCalledWith({ project: 'footle' });
     expect(LikeDocument.populate).toHaveBeenCalledTimes(1);
     expect(LikeDocument.populate).toHaveBeenCalledWith('author');
     expect((LikeDocument as any).limit).toHaveBeenCalledTimes(1);
-    expect((LikeDocument as any).limit).toHaveBeenCalledWith(10);
+    expect((LikeDocument as any).limit).toHaveBeenCalledWith(5);
     expect((LikeDocument as any).sort).toHaveBeenCalledTimes(1);
-    expect((LikeDocument as any).sort).toHaveBeenCalledWith({ date: 'asc' });
+    expect((LikeDocument as any).sort).toHaveBeenCalledWith({ date: 'desc' });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.project).toEqual({
       ...mock.projects.items[0],
       commentCount: 20,
       comments: mockComments,
+      gallery: mock.projects.items[0].gallery.items,
       likeCount: 20,
       likes: mockLikes,
+      responsibilities: mock.projects.items[0].responsibilities.items,
+      tags: mock.projects.items[0].tags.items,
     });
   });
 
@@ -126,7 +134,9 @@ describe('GET /project/:slug', () => {
 
     const res = await request(app).get('/project/footle');
     expect(res.statusCode).toBe(503);
-    expect(res.body.message).toBe('Contentful service is unavailable');
+    expect(res.body.message).toBe(
+      'Project "footle" failed to load due to an issue with Contentful (CMS provider). Sorry!',
+    );
     expect(res.body.status).toBe(503);
   });
 
@@ -135,7 +145,7 @@ describe('GET /project/:slug', () => {
 
     const res = await request(app).get('/project/footle');
     expect(res.statusCode).toBe(404);
-    expect(res.body.message).toBe('Project does not exist');
+    expect(res.body.message).toBe('Project "footle" does not exist. Are you sure you\'re looking for "footle"?');
     expect(res.body.status).toBe(404);
   });
 
@@ -144,7 +154,7 @@ describe('GET /project/:slug', () => {
 
     const res = await request(app).get('/project/footle');
     expect(res.statusCode).toBe(503);
-    expect(res.body.message).toBe('Database service is unavailable');
+    expect(res.body.message).toBe('Project "footle" failed to load due to an issue with our database. Sorry!');
     expect(res.body.status).toBe(503);
   });
 
@@ -158,8 +168,11 @@ describe('GET /project/:slug', () => {
       ...mock.projects.items[0],
       commentCount: 20,
       comments: [],
+      gallery: mock.projects.items[0].gallery.items,
       likeCount: 20,
       likes: [],
+      responsibilities: mock.projects.items[0].responsibilities.items,
+      tags: mock.projects.items[0].tags.items,
     });
   });
 });

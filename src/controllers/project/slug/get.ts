@@ -57,7 +57,8 @@ export async function getProject(req: Request, res: Response, next: NextFunction
       tags: projects[0].tags.items,
     };
     return res.json({ project });
-  } catch {
+  } catch (e) {
+    console.log(e);
     return next(
       createHttpError(503, `Project "${req.params.slug}" failed to load due to an issue with our database. Sorry!`),
     );

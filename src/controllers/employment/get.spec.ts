@@ -32,7 +32,11 @@ describe('GET /employment', () => {
     const res = await request(app).get('/employment');
 
     expect(useGraphql).toHaveBeenCalledTimes(1);
-    expect(useGraphql).toHaveBeenCalledWith({ ...graphqlArgs, path: './../../graphql-queries/employment.graphql' });
+    expect(useGraphql).toHaveBeenCalledWith({
+      ...graphqlArgs,
+      path: './../../graphql-queries/employment.graphql',
+      variables: { locale: 'en' },
+    });
 
     expect(res.statusCode).toBe(200);
     expect(res.body.total).toBe(1);

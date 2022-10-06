@@ -28,7 +28,7 @@ export async function getMore(req: Request, res: Response, next: NextFunction) {
       default:
         return next(createHttpError(400, 'Invalid request'));
     }
-  } catch {
+  } catch (e) {
     return next(createHttpError(503, 'Database service is unavailable'));
   }
 }
