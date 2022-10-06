@@ -9,11 +9,11 @@ import type { ContentfulProject } from 'types/contentful';
 import { useGraphql } from 'utils/graphql';
 
 async function populateComments(Model: typeof CommentDocument, project: string) {
-  return (await Model.find({ project }).populate('author').limit(10).sort({ date: 'asc' })) ?? [];
+  return (await Model.find({ project }).populate('author').limit(5).sort({ date: 'desc' })) ?? [];
 }
 
 async function populateLikes(Model: typeof LikeDocument, project: string) {
-  return (await Model.find({ project }).populate('author').limit(10).sort({ date: 'asc' })) ?? [];
+  return (await Model.find({ project }).populate('author').limit(5).sort({ date: 'desc' })) ?? [];
 }
 
 export async function getProject(req: Request, res: Response, next: NextFunction) {
@@ -28,11 +28,21 @@ export async function getProject(req: Request, res: Response, next: NextFunction
       variables: { slug: req.params.slug },
     }));
   } catch {
-    return next(createHttpError(503, 'Contentful service is unavailable'));
+    return next(
+      createHttpError(
+        503,
+        `Project "${req.params.slug}" failed to load due to an issue with Contentful (CMS provider). Sorry!`,
+      ),
+    );
   }
 
   if (!projects || !projects.length) {
-    return next(createHttpError(404, 'Project does not exist'));
+    return next(
+      createHttpError(
+        404,
+        `Project "${req.params.slug}" does not exist. Are you sure you're looking for "${req.params.slug}"?`,
+      ),
+    );
   }
 
   try {
@@ -40,11 +50,16 @@ export async function getProject(req: Request, res: Response, next: NextFunction
       ...projects[0],
       commentCount: await CommentDocument.countDocuments({ project: req.params.slug }),
       comments: await populateComments(CommentDocument, req.params.slug),
+      gallery: projects[0].gallery.items,
       likeCount: await LikeDocument.countDocuments({ project: req.params.slug }),
       likes: await populateLikes(LikeDocument, req.params.slug),
+      responsibilities: projects[0].responsibilities.items,
+      tags: projects[0].tags.items,
     };
     return res.json({ project });
   } catch {
-    return next(createHttpError(503, 'Database service is unavailable'));
+    return next(
+      createHttpError(503, `Project "${req.params.slug}" failed to load due to an issue with our database. Sorry!`),
+    );
   }
 }
