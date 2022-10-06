@@ -10,11 +10,19 @@ export async function getMore(req: Request, res: Response, next: NextFunction) {
   try {
     switch (content) {
       case 'comments': {
-        const comments = await CommentDocument.find({ project }).sort({ date: 'asc' }).limit(10).skip(Number(skip));
+        const comments = await CommentDocument.find({ project })
+          .sort({ date: 'desc' })
+          .skip(Number(skip))
+          .limit(5)
+          .populate('author');
         return res.json({ comments, skipped: Number(skip) });
       }
       case 'likes': {
-        const likes = await LikeDocument.find({ project }).sort({ date: 'asc' }).limit(10).skip(Number(skip));
+        const likes = await LikeDocument.find({ project })
+          .sort({ date: 'desc' })
+          .skip(Number(skip))
+          .limit(5)
+          .populate('author');
         return res.json({ likes, skipped: Number(skip) });
       }
       default:
