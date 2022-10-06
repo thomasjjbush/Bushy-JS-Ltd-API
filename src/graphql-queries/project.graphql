@@ -7,6 +7,7 @@ query($slug: String!) {
         logo {
           url
         }
+        requiresInverseLogo
         slug
       }
       name
@@ -30,6 +31,12 @@ query($slug: String!) {
           description
           icon
           name
+        }
+      }
+      tags: tagsCollection(limit: 20) {
+        items {
+          name
+          slug
         }
       }
       video {

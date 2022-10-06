@@ -1,5 +1,5 @@
-query {
-  projects: projectCollection(limit: 10, order: [year_DESC]) {
+query ($skip: Int = 0) {
+  projects: projectCollection(limit: 6, order: [year_DESC], skip: $skip) {
     items {
       client {
         name
@@ -7,8 +7,10 @@ query {
         logo {
           url
         }
+        requiresInverseLogo
         slug
       }
+      description
       name
       slug
       thumbnail {
