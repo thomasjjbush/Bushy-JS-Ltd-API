@@ -7,6 +7,10 @@ const UserSchema = new Schema<User>({
     required: true,
     type: Schema.Types.ObjectId,
   },
+  email: {
+    required: false,
+    type: String,
+  },
   initials: {
     required: true,
     type: String,

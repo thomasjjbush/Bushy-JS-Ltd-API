@@ -20,6 +20,7 @@ export function saveToken(req: Request, res: Response, token: string): Response 
   res.cookie('token', token, {
     domain: req.hostname,
     httpOnly: true,
+    path: '/',
     secure: true,
   });
 

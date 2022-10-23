@@ -3,6 +3,9 @@ process.env.JWT_SECRET = 'JWT_SECRET';
 process.env.LINKEDIN_CLIENT_ID = 'LINKEDIN_CLIENT_ID';
 process.env.LINKEDIN_CLIENT_SECRET = 'LINKEDIN_CLIENT_SECRET';
 process.env.MONGO_DB_PASSWORD = 'MONGO_DB_PASSWORD';
+process.env.EMAIL_SMTP_PASSWORD = 'EMAIL_SMTP_PASSWORD';
+process.env.EMAIL_SMTP_USER = 'EMAIL_SMTP_USER';
+process.env.ADMIN_EMAIL_RECIPIENT = 'ADMIN_EMAIL_RECIPIENT';
 
 jest.mock('mongoose', () => ({
   Types: {
@@ -10,8 +13,11 @@ jest.mock('mongoose', () => ({
   },
   connect: jest.fn().mockResolvedValue(true),
 }));
-jest.mock('path', () => ({ resolve: jest.fn((_, path) => path) }));
+jest.mock('path', () => ({ ...jest.requireActual('path'), resolve: jest.fn((_, path) => path) }));
 jest.mock('utils/graphql', () => ({ useGraphql: jest.fn() }));
+jest.mock('utils/events/events', () => ({
+  emit: jest.fn(),
+}));
 
 jest.mock('db/schema', () => ({
   CommentDocument: {

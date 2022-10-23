@@ -1,0 +1,52 @@
+{
+  "confirmation": {
+    "en": {
+      "enquiryDetails": {
+        "company": "Your company:",
+        "email": "Your email:",
+        "message": "Your message:",
+        "name": "Your name:",
+        "number": "Your number:",
+        "opportunityLength": "Opportunity length:",
+        "opportunityType": "Type of opportunity:",
+        "title": "Enquiry details"
+      },
+      "introductionPrefix": "Hi",
+      "message": "Your enquiry has been recieved and I will endevour to respond to you as soon as possible.",
+      "signOff": "Kind regards,",
+      "signOffCompany": "Bushy JS Ltd",
+      "title": "Thanks for your enquiry"
+    },
+    "fr": {
+      "enquiryDetails": {
+        "company": "Votre entreprise:",
+        "email": "Votre e-mail:",
+        "message": "Votre message:",
+        "name": "Votre nom:",
+        "number": "Ton numéro:",
+        "opportunityLength": "Durée de l'opportunité:",
+        "opportunityType": "Type d'opportunité:",
+        "title": "Détails de la demande"
+      },
+      "introductionPrefix": "Salut",
+      "message": "Votre demande a été reçue et je m'efforcerai de vous répondre dans les plus brefs délais.",
+      "signOff": "Sincères amitiés,",
+      "signOffCompany": "Bushy JS Ltd",
+      "title": "Merci pour votre demande"
+    }
+  },
+  "contact": {
+    "enquiryDetails": {
+      "company": "Your company:",
+      "email": "Your email:",
+      "message": "Your message:",
+      "name": "Your name:",
+      "number": "Your number:",
+      "opportunityLength": "Opportunity length:",
+      "opportunityType": "Type of opportunity:",
+      "title": "Enquiry details"
+    },
+    "message": "You have recieved a new enquiry from your portfolio, please see below:",
+    "title": "New enquiry!"
+  }
+}

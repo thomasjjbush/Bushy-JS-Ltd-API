@@ -10,17 +10,34 @@ import { token } from 'testing/variables';
 import { app } from '../..';
 
 jest.mock('axios', () => ({
-  get: jest.fn().mockResolvedValue({
-    data: {
-      id: 'linkedinid',
-      localizedFirstName: 'first',
-      localizedLastName: 'last',
-      profilePicture: {
-        'displayImage~': {
-          elements: [{}, {}, { identifiers: [{ identifier: 'profile-picture' }] }],
+  get: jest.fn((url: string) => {
+    if (url.includes('me?')) {
+      return {
+        data: {
+          id: 'linkedinid',
+          localizedFirstName: 'first',
+          localizedLastName: 'last',
+          profilePicture: {
+            'displayImage~': {
+              elements: [{}, {}, { identifiers: [{ identifier: 'profile-picture' }] }],
+            },
+          },
         },
+      };
+    }
+    return {
+      data: {
+        elements: [
+          {
+            'handle~': {
+              emailAddress: 'email@email.com',
+            },
+            primary: true,
+            type: 'EMAIL',
+          },
+        ],
       },
-    },
+    };
   }),
   post: jest.fn().mockResolvedValue({ data: { access_token: 'linkedin-access-token' } }),
 }));
@@ -93,9 +110,16 @@ describe('GET /sign-in', () => {
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       );
 
-      expect(axios.get).toHaveBeenCalledTimes(1);
-      expect(axios.get).toHaveBeenCalledWith(
+      expect(axios.get).toHaveBeenCalledTimes(2);
+      expect(axios.get).toHaveBeenNthCalledWith(
+        1,
         'https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~digitalmediaAsset:playableStreams))',
+        { headers: { authorization: 'Bearer linkedin-access-token' } },
+      );
+
+      expect(axios.get).toHaveBeenNthCalledWith(
+        2,
+        'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))',
         { headers: { authorization: 'Bearer linkedin-access-token' } },
       );
 
@@ -105,18 +129,14 @@ describe('GET /sign-in', () => {
       expect(UserDocument.create).toHaveBeenCalledTimes(1);
       expect(UserDocument.create).toHaveBeenCalledWith({
         _id: expect.any(Types.ObjectId),
+        email: 'email@email.com',
         initials: 'fl',
         name: 'first last',
         profilePicture: 'profile-picture',
       });
 
-      expect(res.statusCode).toBe(200);
-      expect(res.body.user).toEqual({
-        _id: expect.any(String),
-        initials: 'fl',
-        name: 'first last',
-        profilePicture: 'profile-picture',
-      });
+      expect(res.statusCode).toBe(302);
+      expect(res.headers.location).toBe('http://localhost:8080/');
       expect(res.headers['set-cookie'][0]).toMatch(/token=(.*); Path=\/; HttpOnly/);
     });
 
@@ -128,6 +148,7 @@ describe('GET /sign-in', () => {
       expect(UserDocument.findByIdAndUpdate).toHaveBeenCalledTimes(1);
       expect(UserDocument.findByIdAndUpdate).toHaveBeenCalledWith(expect.any(Types.ObjectId), {
         _id: expect.any(Types.ObjectId),
+        email: 'email@email.com',
         initials: 'fl',
         name: 'first last',
         profilePicture: 'profile-picture',
@@ -167,7 +188,7 @@ describe('GET /sign-in', () => {
     it('should redirect user to linkedin auth page', async () => {
       const res = await request(app).get('/sign-in');
       expect(res.headers.location).toBe(
-        'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=LINKEDIN_CLIENT_ID&redirect_uri=redirect-url&scope=r_emailaddress,r_liteprofile',
+        'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=LINKEDIN_CLIENT_ID&redirect_uri=redirect-url&scope=r_liteprofile,r_emailaddress',
       );
     });
   });

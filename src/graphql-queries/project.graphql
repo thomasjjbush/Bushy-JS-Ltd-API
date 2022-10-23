@@ -1,5 +1,5 @@
-query($slug: String!) {
-  projects: projectCollection(where: { slug: $slug }) {
+query($locale: String = "en", $slug: String!) {
+  projects: projectCollection(locale: $locale, where: { slug: $slug }) {
     items {
       client {
         name

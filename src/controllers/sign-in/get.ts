@@ -6,7 +6,7 @@ import qs from 'query-string';
 
 import { UserDocument } from 'db/schema';
 
-import { LinkedinEndpoints, LinkedinUser } from 'types/linkedin';
+import { LinkedInContactInfo, LinkedinEndpoints, LinkedinUser } from 'types/linkedin';
 import type { User } from 'types/types';
 
 import { linkedinHeaders } from 'utils/linkedin-headers';
@@ -20,7 +20,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
 
   switch (true) {
     // user has existing token
-    case Boolean(req.cookies.token): {
+    case Boolean(req.cookies.token || req.query.persist): {
       const id = await verifyToken(req.cookies.token);
 
       if (id) {
@@ -68,12 +68,21 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
           linkedinHeaders(accessToken),
         );
 
-        user = {
-          _id: new Types.ObjectId(createDbUserId(linkedinUser.id)),
-          initials: linkedinUser.localizedFirstName[0] + linkedinUser.localizedLastName[0],
-          name: `${linkedinUser.localizedFirstName} ${linkedinUser.localizedLastName}`,
-          profilePicture: linkedinUser.profilePicture['displayImage~'].elements[2].identifiers[0].identifier,
-        };
+        let email;
+
+        try {
+          email = (
+            await axios.get<LinkedInContactInfo>(LinkedinEndpoints.CONTACT_INFO, linkedinHeaders(accessToken))
+          ).data.elements?.find(({ type }) => type === 'EMAIL')?.['handle~']?.emailAddress;
+        } finally {
+          user = {
+            _id: new Types.ObjectId(createDbUserId(linkedinUser.id)),
+            initials: linkedinUser.localizedFirstName[0] + linkedinUser.localizedLastName[0],
+            name: `${linkedinUser.localizedFirstName} ${linkedinUser.localizedLastName}`,
+            profilePicture: linkedinUser.profilePicture['displayImage~'].elements[2].identifiers[0].identifier,
+            ...(email && { email }),
+          };
+        }
       } catch {
         return next(createHttpError(503, 'Linkedin profile service in unavailable'));
       }
@@ -86,11 +95,11 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
         } else {
           await UserDocument.create(user);
         }
-      } catch {
+      } catch (e) {
         return next(createHttpError(503, 'Database service is unavailable'));
       }
 
-      return saveToken(req, res, signToken(user._id.toString())).json({ user: { ...user, _id: user._id.toString() } });
+      return saveToken(req, res, signToken(user._id.toString())).redirect(process.env.CLIENT);
     }
     // user needs to be directed to linkedin auth page
     default: {

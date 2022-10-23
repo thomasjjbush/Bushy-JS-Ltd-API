@@ -4,11 +4,20 @@ import { LikeDocument, UserDocument } from 'db/schema';
 
 import { graphqlArgs, token } from 'testing/variables';
 
+import { EventTypes } from 'types/types';
+
+import EventFactory from 'utils/events/events';
 import { useGraphql } from 'utils/graphql';
 
 import { app } from '../../../..';
 
 (useGraphql as jest.Mock).mockResolvedValue({ projects: { items: [{ slug: 'project-slug' }] } });
+
+(LikeDocument.create as jest.Mock).mockReturnThis();
+(LikeDocument.populate as jest.Mock).mockResolvedValue({
+  author: 'user-id',
+  project: 'project-slug',
+});
 
 describe('POST /project/:slug/like/:id', () => {
   it('should return 401 if no token is present', async () => {
@@ -37,6 +46,9 @@ describe('POST /project/:slug/like/:id', () => {
 
       expect(LikeDocument.create).toHaveBeenCalledTimes(1);
       expect(LikeDocument.create).toHaveBeenCalledWith(expectedLike);
+
+      expect(EventFactory.emit).toHaveBeenCalledTimes(1);
+      expect(EventFactory.emit).toHaveBeenCalledWith(EventTypes.ADD_LIKE, expectedLike);
 
       expect(res.statusCode).toBe(200);
       expect(res.body.like).toEqual(expectedLike);

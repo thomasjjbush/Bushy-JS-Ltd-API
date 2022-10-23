@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+  <head>
+    <!-- xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" -->
+    <!--[if gte mso 9]><xml>
+        <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml><![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Render-Mode" content="html" />
+	  <title><%= labels.title %></title>
+    <style type="text/css">
+      h1, h2, h3, h4, h5 { font-weight: normal; }
+    
+      @media (max-width: 520px) {
+        body {
+          -webkit-text-size-adjust: none; 
+          -ms-text-size-adjust: none;
+          margin: 0px;
+        }	
+        
+        * {
+          outline: none;
+          border:none;  
+        }
+        
+        table td {
+          border-collapse: collapse;
+        }
+        
+        table {
+          width: 100% !important;
+        }
+        
+        img {
+          width: 100% !important;
+          height:	auto !important;
+          padding: 0px !important;
+          outline:none;
+          border:0 none;
+          display: block;
+        }
+        
+        td[class="Hide"] {
+          width:0px !important;
+          display:none !important;
+        }
+        
+        td[class="gutter"] {
+          width:18px !important;  
+        }
+        
+        td[class="stack-me"] {
+          width: 100% !important;
+          display: block !important;  
+        }
+        
+        p[class="ltc"] {
+          text-align:center !important;
+        }
+      }
+    </style>
+  </head>
+  <body style="margin:0px;">
+    <table height="100%" width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td valign="top" align="left" bgcolor="<%= theme === 'dark' ? '#010101' : '#f4f4f4' %>">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+  	        <tr>
+   	  	      <td>
+                <table width="580" border="0" cellspacing="0" cellpadding="0" bgcolor="<%= theme === 'dark' ? '#111111' : '#ffffff' %>" align="center" style="border-spacing:0px !important; width:580px;">
+                  <tr>
+    				        <td class="stack-me" width="580" style="width:580px;">                    
+                    	<!-- LOGO IMAGE -->
+                      <table width="580" border="0" cellspacing="0" cellpadding="0" style="width:580px;">
+                        <tr>
+                          <td class="gutter" width="515" style="width:515px; border-collapse: collapse;">&nbsp;</td>
+                            <td class="stack-me" width="35" style="width:35px;" align="center" valign="top">
+                              <br />
+                              <img src="<%= process.env.SERVER %>/static/<%= theme %>/logo.jpg" alt="Bushy JS Ltd" width="35" height="54" style="width:35px; display:block; border:none; padding:0px; margin:auto; outline:none; max-width:35px;" />
+                              <br /><br />
+                            </td>
+                          <td class="gutter" width="30" style="width:30px; border-collapse: collapse;">&nbsp;</td>
+                        </tr>
+                      </table>
+                      <!-- LOGO END -->
+                    
+                    	<!-- TITLE -->
+                      <table width="580" border="0" cellspacing="0" cellpadding="0" style="width:580px;">
+                        <tr>
+                          <td class="gutter" width="30" style="width:30px; border-collapse: collapse;">&nbsp;</td>
+                          <td class="stack-me" width="520" style="width:520px;" align="left" valign="top">
+                            <font style="font-family:Arial, Helvetica, sans-serif; font-size:34px; text-align:left; color:#FF8700; font-weight:bold; text-decoration:none; margin:0px; padding:0px;">
+                              <%= labels.title %>
+                              <br /><br />
+                            </font>
+                          </td>
+                          <td class="gutter" width="30" style="width:30px; border-collapse: collapse;">&nbsp;</td>
+                        </tr>
+                      </table>
+                      <!-- TITLE END -->
+                    
+                    	<!-- HERO IMAGE -->
+                      <table width="580" border="0" cellspacing="0" cellpadding="0" style="width:580px;">
+                        <tr>
+                          <td class="gutter" width="30" style="width:30px; border-collapse: collapse;">&nbsp;</td>
+                          <td class="stack-me" width="520" style="width:520px;" align="center" valign="top" bgcolor="#ececec">
+                            <img src="<%= process.env.SERVER %>/static/<%= theme %>/hero.jpg" alt="Bushy JS Ltd" width="520" height="184" style="width:520px; display:block; border:none; padding:0px; margin:auto; outline:none; max-width:520px;" />
+                          </td>
+                          <td class="gutter" width="30" style="width:30px; border-collapse: collapse;">&nbsp;</td>
+                        </tr>
+                      </table>
+                      <!-- HERO IMAGE END -->
+                        
+                      <!-- MESSAGE -->
+                      <table width="580" border="0" cellspacing="0" cellpadding="0" style="width:580px;">
+                        <tr>
+                          <td class="gutter" width="30" style="width:30px; border-collapse: collapse;">&nbsp;</td>
+                          <td class="stack-me" width="520" style="width:520px;" align="left" valign="top">
+                            <font style="font-family:Arial, Helvetica, sans-serif; font-size:16px; text-align:left; color:<%= theme === 'dark' ? '#ffffff' : '#111111' %>; font-weight:100; text-decoration:none; margin:0px; padding:0px;">
+                              <br   /><br   />
+                              <% if (labels.introductionPrefix) { %>
+                                <%= labels.introductionPrefix %>  <%= info.name %>
+                                <br   /><br   />
+                              <% } %>
+                              <%= labels.message %>
+                              <br   /><br   /><br  />
+                              <span style="color: #FF8700; font-size: 20px; font-weight: bold;"><%= labels.enquiryDetails.title %></span>
+                              <br   /><br   />
+                              <span style="color: #FF8700; font-weight: bold;"><%= labels.enquiryDetails.name %></span> <%= info.name %>
+                              <br   /><br   />
+                              <span style="color: #FF8700; font-weight: bold;"><%= labels.enquiryDetails.email %></span> <%= info.email %>
+                              <br   /><br   />
+                              <% if (info.number) { %>
+                                <span style="color: #FF8700; font-weight: bold;"><%= labels.enquiryDetails.number %></span> <%= info.number %>
+                                <br   /><br   />
+                              <% } %>
+                              <% if (info.company) { %>
+                                <span style="color: #FF8700; font-weight: bold;"><%= labels.enquiryDetails.company %></span> <%= info.company %>
+                                <br   /><br   />
+                              <% } %>
+                              <span style="color: #FF8700; font-weight: bold;"><%= labels.enquiryDetails.opportunityType %></span> <%= info.opportunityType %>
+                              <br   /><br   />
+                              <% if (info.opportunityLength) { %>
+                                <span style="color: #FF8700; font-weight: bold;"><%= labels.enquiryDetails.opportunityLength %></span> <%= info.opportunityLength %>
+                                <br   /><br   />
+                              <% } %>
+                              <span style="color: #FF8700; font-weight: bold;"><%= labels.enquiryDetails.message %></span> <%= info.message %>
+                              <br   /><br   /><br   />
+                              <% if (labels.signOff && labels.signOffCompany) { %>
+                                <%= labels.signOff %>
+                                <br   /><br   />
+                                <span style="font-weight: bold;"><%= labels.signOffCompany %></span>
+                                <br   /><br   /><br   />
+                              <% } %>
+                            </font>
+                          </td>
+                          <td class="gutter" width="30" style="width:30px; border-collapse: collapse;">&nbsp;</td>
+                        </tr>
+                      </table>
+                      <!-- MESSAGE END -->
+                  	</td>
+  				        </tr> 
+			          </table>
+      	      </td> 
+  	        </tr> 
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
