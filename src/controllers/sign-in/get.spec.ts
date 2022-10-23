@@ -136,7 +136,7 @@ describe('GET /sign-in', () => {
       });
 
       expect(res.statusCode).toBe(302);
-      expect(res.headers.location).toBe('http://localhost:8080/');
+      expect(res.headers.location).toBe('CLIENT');
       expect(res.headers['set-cookie'][0]).toMatch(/token=(.*); Path=\/; HttpOnly/);
     });
 

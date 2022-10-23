@@ -6,6 +6,7 @@ process.env.MONGO_DB_PASSWORD = 'MONGO_DB_PASSWORD';
 process.env.EMAIL_SMTP_PASSWORD = 'EMAIL_SMTP_PASSWORD';
 process.env.EMAIL_SMTP_USER = 'EMAIL_SMTP_USER';
 process.env.ADMIN_EMAIL_RECIPIENT = 'ADMIN_EMAIL_RECIPIENT';
+process.env.CLIENT = 'CLIENT';
 
 jest.mock('mongoose', () => ({
   Types: {
