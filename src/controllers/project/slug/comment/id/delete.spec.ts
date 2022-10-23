@@ -4,6 +4,10 @@ import { CommentDocument, UserDocument } from 'db/schema';
 
 import { token } from 'testing/variables';
 
+import { EventTypes } from 'types/types';
+
+import EventFactory from 'utils/events/events';
+
 import { app } from '../../../../..';
 
 describe('DELETE /project/:slug/comment/:id', () => {
@@ -23,6 +27,8 @@ describe('DELETE /project/:slug/comment/:id', () => {
         author: {
           toString: jest.fn().mockReturnValue('user-id'),
         },
+        comment: 'This is a comment',
+        project: 'mock-project',
       });
 
       const res = await request(app).delete('/project/project-slug/comment/comment-id').set('Cookie', token);
@@ -31,6 +37,13 @@ describe('DELETE /project/:slug/comment/:id', () => {
       expect(CommentDocument.findById).toHaveBeenCalledWith('comment-id');
       expect(CommentDocument.findByIdAndDelete).toHaveBeenCalledTimes(1);
       expect(CommentDocument.findByIdAndDelete).toHaveBeenCalledWith('comment-id');
+
+      expect(EventFactory.emit).toHaveBeenCalledTimes(1);
+      expect(EventFactory.emit).toHaveBeenCalledWith(EventTypes.DELETE_COMMENT, {
+        author: { toString: expect.any(Function) },
+        comment: 'This is a comment',
+        project: 'mock-project',
+      });
 
       expect(res.statusCode).toBe(200);
       expect(res.body.message).toBe('Comment deleted');

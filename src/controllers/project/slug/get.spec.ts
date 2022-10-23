@@ -22,6 +22,7 @@ const mock = {
         },
         description: 'project-description',
         gallery: { items: [{ url: 'gallery-url' }] },
+        hasLiked: false,
         hero: {
           url: 'hero-url',
         },

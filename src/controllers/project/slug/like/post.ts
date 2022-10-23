@@ -5,7 +5,9 @@ import path from 'path';
 import { LikeDocument } from 'db/schema';
 
 import type { ContentfulProject } from 'types/contentful';
+import { EventTypes } from 'types/types';
 
+import EventFactory from 'utils/events/events';
 import { useGraphql } from 'utils/graphql';
 
 export async function postLike(req: Request, res: Response, next: NextFunction) {
@@ -38,10 +40,15 @@ export async function postLike(req: Request, res: Response, next: NextFunction) 
   }
 
   try {
-    const like = await LikeDocument.create({
-      author: res.locals.id,
-      project: req.params.slug,
-    });
+    const like = await (
+      await LikeDocument.create({
+        author: res.locals.id,
+        project: req.params.slug,
+      })
+    ).populate('author');
+
+    EventFactory.emit(EventTypes.ADD_LIKE, like);
+
     return res.json({ like });
   } catch {
     return next(createHttpError(503, 'Database service is unavailable'));

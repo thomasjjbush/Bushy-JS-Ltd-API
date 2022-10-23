@@ -1,5 +1,5 @@
-query ($skip: Int = 0) {
-  projects: projectCollection(limit: 6, order: [year_DESC], skip: $skip) {
+query ($locale: String = "en", $skip: Int = 0) {
+  projects: projectCollection(limit: 6, locale: $locale, order: [year_DESC], skip: $skip) {
     items {
       client {
         name

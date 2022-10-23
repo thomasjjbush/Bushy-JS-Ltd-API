@@ -4,11 +4,28 @@ import { CommentDocument, UserDocument } from 'db/schema';
 
 import { graphqlArgs, token } from 'testing/variables';
 
+import { EventTypes } from 'types/types';
+
+import EventFactory from 'utils/events/events';
 import { useGraphql } from 'utils/graphql';
 
 import { app } from '../../../..';
 
+jest.mock('axios', () => ({
+  post: jest.fn().mockResolvedValue({
+    data: {
+      censored_content: 'This is a censored comment!',
+    },
+  }),
+}));
+
 (useGraphql as jest.Mock).mockResolvedValue({ projects: { items: [{ slug: 'project-slug' }] } });
+(CommentDocument.create as jest.Mock).mockReturnThis();
+(CommentDocument.populate as jest.Mock).mockResolvedValue({
+  author: 'user-id',
+  comment: 'This is a censored comment!',
+  project: 'project-slug',
+});
 
 describe('POST /project/:slug/comment/:id', () => {
   it('should return 401 if no token is present', async () => {
@@ -36,7 +53,7 @@ describe('POST /project/:slug/comment/:id', () => {
         .set('Cookie', token)
         .send({ comment: 'This is a comment!' });
 
-      const expectedComment = { author: 'user-id', comment: 'This is a comment!', project: 'project-slug' };
+      const expectedComment = { author: 'user-id', comment: 'This is a censored comment!', project: 'project-slug' };
 
       expect(useGraphql).toHaveBeenCalledTimes(1);
       expect(useGraphql).toHaveBeenCalledWith({
@@ -47,6 +64,9 @@ describe('POST /project/:slug/comment/:id', () => {
 
       expect(CommentDocument.create).toHaveBeenCalledTimes(1);
       expect(CommentDocument.create).toHaveBeenCalledWith(expectedComment);
+
+      expect(EventFactory.emit).toHaveBeenCalledTimes(1);
+      expect(EventFactory.emit).toHaveBeenCalledWith(EventTypes.ADD_COMMENT, expectedComment);
 
       expect(res.statusCode).toBe(200);
       expect(res.body.comment).toEqual(expectedComment);

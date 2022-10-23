@@ -3,7 +3,9 @@ import createHttpError from 'http-errors';
 
 import { CommentDocument } from 'db/schema';
 
-import type { Comment } from 'types/types';
+import { Comment, EventTypes } from 'types/types';
+
+import EventFactory from 'utils/events/events';
 
 export async function deleteComment(req: Request, res: Response, next: NextFunction) {
   try {
@@ -18,6 +20,8 @@ export async function deleteComment(req: Request, res: Response, next: NextFunct
     }
 
     await CommentDocument.findByIdAndDelete(req.params.id);
+
+    EventFactory.emit(EventTypes.DELETE_COMMENT, comment);
 
     return res.json({ message: 'Comment deleted' });
   } catch {

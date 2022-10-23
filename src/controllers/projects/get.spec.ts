@@ -25,6 +25,7 @@ const mock = {
           url: 'client-url',
         },
         description: 'project description',
+        hasLiked: false,
         name: 'project name',
         slug: 'project-slug',
         tags: [

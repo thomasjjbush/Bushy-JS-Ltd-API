@@ -18,7 +18,7 @@ export async function getEmployment(req: Request, res: Response, next: NextFunct
       },
     });
     return res.json({ employment, total });
-  } catch (e) {
+  } catch {
     return next(createHttpError(503, 'Contentful service is unavailable'));
   }
 }

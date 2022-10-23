@@ -1,0 +1,24 @@
+query($client: String!, $locale: String = "en", $slug: String!, $tag: String!) {
+  sameClient: projectCollection(limit: 3, locale: $locale, where: { client: { slug: $client }, slug_not: $slug }) {
+    items {
+      name
+      slug
+      thumbnail {
+        url
+      }
+    }
+  }
+  sameTag: projectCollection(
+    limit: 3,
+    locale: $locale,
+    where: { client: { slug_not: $client }, primaryTag: { slug: $tag }, slug_not: $slug }
+  ) {
+    items {
+      name
+      slug
+      thumbnail {
+        url
+      }
+    }
+  }
+}

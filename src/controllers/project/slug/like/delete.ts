@@ -3,21 +3,21 @@ import createHttpError from 'http-errors';
 
 import { LikeDocument } from 'db/schema';
 
-import type { Like } from 'types/types';
+import { EventTypes, Like } from 'types/types';
+
+import EventFactory from 'utils/events/events';
 
 export async function deleteLike(req: Request, res: Response, next: NextFunction) {
   try {
-    const comment = await LikeDocument.findById<Like>(req.params.id);
+    const like = await LikeDocument.findOne<Like>({ author: res.locals.id, project: req.params.slug });
 
-    if (!comment) {
+    if (!like) {
       return next(createHttpError(404, 'Like does not exist'));
     }
 
-    if (comment.author.toString() !== res.locals.id) {
-      return next(createHttpError(401, 'Insufficient permissions'));
-    }
+    await LikeDocument.findByIdAndDelete(like._id);
 
-    await LikeDocument.findByIdAndDelete(req.params.id);
+    EventFactory.emit(EventTypes.DELETE_LIKE, like);
 
     return res.json({ message: 'Like deleted' });
   } catch {
