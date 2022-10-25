@@ -21,7 +21,7 @@ export function saveToken(req: Request, res: Response, token: string): Response 
     domain: req.hostname,
     httpOnly: true,
     path: '/',
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
   });
 
   return res;
