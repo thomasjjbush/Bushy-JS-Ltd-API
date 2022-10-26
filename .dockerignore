@@ -1,0 +1,13 @@
+.dockerignore
+.env
+.eslintrc.json
+.git
+.github
+.gitignore
+.prettierrc.json
+coverage
+Dockerfile
+jest.config.ts
+jest.setup.ts
+node_modules
+README.md
