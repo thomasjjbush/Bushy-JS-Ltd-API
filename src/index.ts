@@ -32,7 +32,6 @@ let app: Express;
   );
 
   app = express();
-
   app.enable('trust proxy');
   app.use(cors({ credentials: true, origin: true }));
   app.use(express.json());
