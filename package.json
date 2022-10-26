@@ -2,7 +2,6 @@
   "name": "bushy-js-ltd-api",
   "version": "1.0.0",
   "description": "Bushy JS Ltd portfolio API",
-  "main": "index.js",
   "author": "thomasjjbush",
   "license": "MIT",
   "private": true,
