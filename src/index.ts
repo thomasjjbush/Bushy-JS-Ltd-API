@@ -39,9 +39,7 @@ let app: Express;
   app.use(cookieParser());
   app.use(graphqlMiddleware);
 
-  // if (process.env.NODE_ENV !== 'test') {
   app.use('/static', express.static(path.join(__dirname, 'emails/img')));
-  // }
 
   app.get('/employment', getEmployment);
   app.get('/projects', getProjects);
