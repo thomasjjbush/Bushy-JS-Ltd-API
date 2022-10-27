@@ -1,7 +1,7 @@
 {
   "name": "bushy-js-ltd-api",
   "version": "1.0.0",
-  "description": "Bushy JS Ltd portfolio API",
+  "description": "Bushy JS Ltd portfolio node API",
   "author": "thomasjjbush",
   "license": "MIT",
   "private": true,
