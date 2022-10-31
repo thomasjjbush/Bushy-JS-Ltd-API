@@ -29,7 +29,9 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
           if (user) {
             return res.json({ user });
           }
-          return res.clearCookie('token').json({ user: null });
+          res.clearCookie('token');
+          res.json({ user: null });
+          return res;
         } catch {
           return next(createHttpError(503, 'Contentful service is unavailable'));
         }
