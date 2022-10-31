@@ -18,7 +18,6 @@ export async function verifyToken(token: string): Promise<string | null> {
 
 export function saveToken(req: Request, res: Response, token: string): Response {
   res.cookie('token', token, {
-    domain: req.hostname,
     httpOnly: true,
     path: '/',
     secure: process.env.NODE_ENV === 'production',
