@@ -29,7 +29,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
           if (user) {
             return res.json({ user });
           }
-          res.clearCookie('token');
+          res.clearCookie('token', { path: '/' });
           res.json({ user: null });
           return res;
         } catch {
