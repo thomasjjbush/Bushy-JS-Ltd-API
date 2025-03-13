@@ -1,5 +1,6 @@
 {
   "name": "bushy-js-ltd-api",
+  "packageManager": "yarn@1.22.22",
   "version": "1.0.0",
   "description": "Bushy JS Ltd portfolio API",
   "author": "thomasjjbush",
