@@ -12,7 +12,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "importsNotUsedAsValues": "error",
     "outDir": "build",
     "typeRoots": [
       "node_modules/@types",

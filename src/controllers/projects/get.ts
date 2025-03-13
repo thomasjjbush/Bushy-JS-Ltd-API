@@ -20,7 +20,7 @@ export async function getProjects(req: Request, res: Response, next: NextFunctio
     } = await useGraphql<ContentfulProject>({
       client: res.locals.graphqlClient,
       path: path.resolve(__dirname, './../../graphql-queries/projects.graphql'),
-      variables: { locale: req.query.locale, skip: Number(req.query.skip) || 0 },
+      variables: { locale: req.query.locale, searchTerm: req.query.searchTerm, skip: Number(req.query.skip) || 0 },
     }));
   } catch (e) {
     return next(createHttpError(503, 'Contentful service is unavailable'));

@@ -13,6 +13,10 @@ import { useGraphql } from 'utils/graphql';
 export async function postLike(req: Request, res: Response, next: NextFunction) {
   let projects: ContentfulProject[];
 
+  if (!req.params.slug) {
+    return next(createHttpError(400, 'Invalid request'));
+  }
+
   try {
     ({
       projects: { items: projects },

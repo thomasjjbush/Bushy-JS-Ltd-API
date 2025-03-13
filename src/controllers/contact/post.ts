@@ -36,8 +36,9 @@ export async function contact(req: Request<ParamsDictionary, unknown, Body, Quer
         pass: process.env.EMAIL_SMTP_PASSWORD,
         user: process.env.EMAIL_SMTP_USER,
       },
-      host: 'smtp-relay.sendinblue.com',
+      host: 'smtp-relay.brevo.com',
       port: 587,
+      secure: false,
     });
 
     await Promise.all(
@@ -47,7 +48,7 @@ export async function contact(req: Request<ParamsDictionary, unknown, Body, Quer
       ].map(async ({ labels, subject, to }) => {
         try {
           const html = await renderFile(template, { info: req.body, labels, theme });
-          await transporter.sendMail({ from: 'Bushy JS Ltd noreply@bushyjsltd.com', html, subject, to });
+          await transporter.sendMail({ from: 'bushy.js.ltd@gmail.com', html, subject, to });
         } catch {
           return next(createHttpError(503, 'Unable to send HTML email'));
         }

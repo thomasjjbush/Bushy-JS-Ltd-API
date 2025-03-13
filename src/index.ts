@@ -28,7 +28,7 @@ let app: Express;
 
 (async () => {
   await mongoose.connect(
-    `mongodb+srv://tjjb:${process.env.MONGO_DB_PASSWORD}@bushyjsltd.nosraw7.mongodb.net/?retryWrites=true&w=majority`,
+    `mongodb+srv://tjjb:${process.env.MONGO_DB_PASSWORD}@bushyjsltdv2.cazr5.mongodb.net/?retryWrites=true&w=majority&appName=BushyJSLtdV2`,
   );
 
   app = express();

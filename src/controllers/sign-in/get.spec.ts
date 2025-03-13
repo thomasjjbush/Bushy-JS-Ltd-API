@@ -11,17 +11,15 @@ import { app } from '../..';
 
 jest.mock('axios', () => ({
   get: jest.fn((url: string) => {
-    if (url.includes('me?')) {
+    if (url.includes('userinfo')) {
       return {
         data: {
-          id: 'linkedinid',
-          localizedFirstName: 'first',
-          localizedLastName: 'last',
-          profilePicture: {
-            'displayImage~': {
-              elements: [{}, {}, { identifiers: [{ identifier: 'profile-picture' }] }],
-            },
-          },
+          email: 'email@email.com',
+          family_name: 'Last',
+          given_name: 'First',
+          name: 'First Last',
+          picture: 'profile-picture',
+          sub: 'linkedinid',
         },
       };
     }
@@ -77,7 +75,7 @@ describe('GET /sign-in', () => {
 
       const res = await request(app).get('/sign-in').set('Cookie', token);
       expect(res.body.user).toBe(null);
-      expect(res.headers['set-cookie']).toEqual(['token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT']);
+      expect(res.headers['set-cookie']).toEqual(['token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly']);
       expect(res.statusCode).toBe(200);
     });
 
@@ -110,18 +108,10 @@ describe('GET /sign-in', () => {
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       );
 
-      expect(axios.get).toHaveBeenCalledTimes(2);
-      expect(axios.get).toHaveBeenNthCalledWith(
-        1,
-        'https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~digitalmediaAsset:playableStreams))',
-        { headers: { authorization: 'Bearer linkedin-access-token' } },
-      );
-
-      expect(axios.get).toHaveBeenNthCalledWith(
-        2,
-        'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))',
-        { headers: { authorization: 'Bearer linkedin-access-token' } },
-      );
+      expect(axios.get).toHaveBeenCalledTimes(1);
+      expect(axios.get).toHaveBeenCalledWith('https://api.linkedin.com/v2/userinfo', {
+        headers: { authorization: 'Bearer linkedin-access-token' },
+      });
 
       expect(UserDocument.findById).toHaveBeenCalledTimes(1);
       expect(UserDocument.findById).toHaveBeenCalledWith(expect.any(Types.ObjectId));
@@ -130,8 +120,8 @@ describe('GET /sign-in', () => {
       expect(UserDocument.create).toHaveBeenCalledWith({
         _id: expect.any(Types.ObjectId),
         email: 'email@email.com',
-        initials: 'fl',
-        name: 'first last',
+        initials: 'FL',
+        name: 'First Last',
         profilePicture: 'profile-picture',
       });
 
@@ -149,8 +139,8 @@ describe('GET /sign-in', () => {
       expect(UserDocument.findByIdAndUpdate).toHaveBeenCalledWith(expect.any(Types.ObjectId), {
         _id: expect.any(Types.ObjectId),
         email: 'email@email.com',
-        initials: 'fl',
-        name: 'first last',
+        initials: 'FL',
+        name: 'First Last',
         profilePicture: 'profile-picture',
       });
       expect(UserDocument.create).not.toHaveBeenCalled();
@@ -188,7 +178,14 @@ describe('GET /sign-in', () => {
     it('should redirect user to linkedin auth page', async () => {
       const res = await request(app).get('/sign-in');
       expect(res.headers.location).toBe(
-        'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=LINKEDIN_CLIENT_ID&redirect_uri=redirect-url&scope=r_liteprofile,r_emailaddress',
+        'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=LINKEDIN_CLIENT_ID&redirect_uri=redirect-url&scope=email,openid,profile',
+      );
+    });
+
+    it('should redirect user to linkedin auth page with their current application state in the url', async () => {
+      const res = await request(app).get('/sign-in?action=comment&comment=Hello&slug=slug');
+      expect(res.headers.location).toBe(
+        'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=LINKEDIN_CLIENT_ID&redirect_uri=redirect-url&scope=email%2Copenid%2Cprofile&state=eyJhY3Rpb24iOiJjb21tZW50IiwiY29tbWVudCI6IkhlbGxvIiwic2x1ZyI6InNsdWcifQ%3D%3D',
       );
     });
   });

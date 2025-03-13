@@ -1,5 +1,13 @@
-query ($locale: String = "en", $skip: Int = 0) {
-  projects: projectCollection(limit: 6, locale: $locale, order: [year_DESC], skip: $skip) {
+query ($locale: String = "en", $searchTerm: String = "", $skip: Int = 0) {
+  projects: projectCollection(
+    limit: 6,
+    locale: $locale,
+    order: [year_DESC],
+    skip: $skip,
+    where: {
+      name_contains: $searchTerm
+    }
+) {
     items {
       client {
         name

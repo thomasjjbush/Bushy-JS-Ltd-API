@@ -55,8 +55,9 @@ describe('POST /contact', () => {
         pass: 'EMAIL_SMTP_PASSWORD',
         user: 'EMAIL_SMTP_USER',
       },
-      host: 'smtp-relay.sendinblue.com',
+      host: 'smtp-relay.brevo.com',
       port: 587,
+      secure: false,
     });
 
     expect(renderFile).toHaveBeenCalledTimes(2);
@@ -73,13 +74,13 @@ describe('POST /contact', () => {
 
     expect(mockSendMail).toHaveBeenCalledTimes(2);
     expect(mockSendMail).toHaveBeenNthCalledWith(1, {
-      from: 'Bushy JS Ltd noreply@bushyjsltd.com',
+      from: 'bushy.js.ltd@gmail.com',
       html: 'html template',
       subject: 'New enquiry',
       to: 'ADMIN_EMAIL_RECIPIENT',
     });
     expect(mockSendMail).toHaveBeenNthCalledWith(2, {
-      from: 'Bushy JS Ltd noreply@bushyjsltd.com',
+      from: 'bushy.js.ltd@gmail.com',
       html: 'html template',
       subject: 'Thanks for your enquiry',
       to: 'john.smith@gmail.com',
