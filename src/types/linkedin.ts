@@ -5,8 +5,6 @@ export enum LinkedinEndpoints {
   ME = 'https://api.linkedin.com/v2/userinfo',
 }
 
-// 1ring2ruleThemAll_#
-
 export interface LinkedinUser {
   email: string;
   email_verified: boolean;
