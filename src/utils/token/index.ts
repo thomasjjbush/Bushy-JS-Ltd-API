@@ -17,7 +17,11 @@ export async function verifyToken(token: string): Promise<string | null> {
 }
 
 export function saveToken(req: Request, res: Response, token: string): Response {
+  const expiryDate = new Date();
+  expiryDate.setTime(expiryDate.getTime() + 365 * 24 * 60 * 60 * 1000);
+
   res.cookie('token', token, {
+    expires: expiryDate,
     httpOnly: true,
     path: '/',
     secure: process.env.NODE_ENV === 'production',
